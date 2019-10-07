@@ -13,7 +13,7 @@ class _HomeListState extends State<HomeList>{
 	Widget build(BuildContext context) {
     	return ListView(
 			shrinkWrap: true,
-			children: HomeList.items
+			children: HomeList.items,
 		);
   	}
 

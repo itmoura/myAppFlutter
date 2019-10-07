@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:myapp/pages/about.dart';
 import 'package:myapp/pages/home.dart';
+import 'package:myapp/pages/list.dart';
 import 'package:myapp/pages/settings.dart';
 import 'package:myapp/widgets/HomeList.dart';
 
@@ -9,17 +10,9 @@ class Layout {
   static final pages = [HomePage.tag, AboutPage.tag, SettingsPage.tag];
   static int currItem = 0;
 
-  static Scaffold getContent(BuildContext context, content) {
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: secondary(),
-          title: Center(
-            child: Text('IT LIST'),
-          ),
-          /* BOTÃO + E MODAL */
-          actions: _getActions(context)),
-      /* NAVEGAÇÃO */
-      bottomNavigationBar: BottomNavigationBar(
+  static Scaffold getContent(BuildContext context, content, [bool showBottom = true]) {
+    
+	BottomNavigationBar bottomNavBar = BottomNavigationBar(
         currentIndex: currItem,
         fixedColor: danger(),
         // type: BottomNavigationBarType.fixed, -- para + q 3 botões
@@ -35,7 +28,21 @@ class Layout {
           currItem = i;
           Navigator.of(context).pushNamed(pages[currItem]);
         },
-      ),
+    );
+
+	if(!showBottom)
+		currItem = 1;
+
+	return Scaffold(
+      appBar: AppBar(
+          backgroundColor: secondary(),
+          title: Center(
+            child: Text('IT LIST'),
+          ),
+          /* BOTÃO + E MODAL */
+          actions: _getActions(context)),
+      /* NAVEGAÇÃO */
+      bottomNavigationBar: showBottom ? bottomNavBar : null,
       body: content,
     );
   }
@@ -74,7 +81,7 @@ class Layout {
 							child:
 								Text("Cancelar", style: TextStyle(color: light())),
 							onPressed: () {
-							Navigator.of(ctx).pop();
+								Navigator.of(ctx).pop();
 							},
 						),
 						RaisedButton(
@@ -89,6 +96,9 @@ class Layout {
 										leading: Icon(Icons.pages),
 										title: Text(input.controller.text),
 										trailing: Icon(Icons.more_vert),
+										onTap: (){
+											Navigator.of(context).pushNamed(ListPage.tag);
+										},
 									)	
 								);
 								Navigator.of(ctx).popAndPushNamed(HomePage.tag);
